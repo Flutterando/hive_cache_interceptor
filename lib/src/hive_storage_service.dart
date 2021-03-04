@@ -9,13 +9,11 @@ class HiveStorageService implements IStorageService {
 
   final _box = Completer<Box>();
 
-  factory HiveStorageService([String boxName = "storage-box"]) =>
-      HiveStorageService._(boxName);
+  factory HiveStorageService([String boxName = "storage-box"]) => HiveStorageService._(boxName);
 
-  factory HiveStorageService.test(Box box) =>
-      HiveStorageService._("test-box", box);
+  factory HiveStorageService.test(Box box) => HiveStorageService._("test-box", box);
 
-  HiveStorageService._([this.boxName = "storage-box", Box box]) {
+  HiveStorageService._([this.boxName = "storage-box", Box? box]) {
     if (box == null) {
       _initBox();
     } else {
@@ -34,20 +32,20 @@ class HiveStorageService implements IStorageService {
   Future<dynamic> get(String key) async {
     Map response = {};
     final box = await _box.future;
-    if (box.containsKey(key)) {
-      response = box.get(key);
-    }
+    if (box.containsKey(key)) response = box.get(key);
     return response["value"];
   }
 
   @override
   Future<void> put(String key, dynamic value) async {
     final box = await _box.future;
-    await box.put(key, {"value": value});
+    await box.put(key, {
+      "value": value
+    });
   }
 
   @override
-  Future<bool> containsKey(String key) async {
+  Future<bool> containsKey(String? key) async {
     final box = await _box.future;
     return key != null && box.containsKey(key);
   }

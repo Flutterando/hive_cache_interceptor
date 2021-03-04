@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_cache_interceptor/src/hive_storage_service.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockBox<T> extends Mock implements Box<T> {
   Map data = {};
@@ -23,15 +23,15 @@ class MockBox<T> extends Mock implements Box<T> {
   }
 
   @override
-  T get(key, {T defaultValue}) => data[key] ?? defaultValue;
+  T get(key, {T? defaultValue}) => data[key] ?? defaultValue;
 
   @override
   bool containsKey(key) => data.containsKey(key);
 }
 
 void main() {
-  MockBox box;
-  HiveStorageService storage;
+  late MockBox box;
+  late HiveStorageService storage;
 
   setUp(() {
     box = MockBox();
@@ -72,8 +72,4 @@ void main() {
     await storage.clear();
     expect(box.data, {});
   });
-
-  // tearDown(() async {
-  //   await Hive.deleteBoxFromDisk("hive-storage-service-test-box");
-  // });
 }
